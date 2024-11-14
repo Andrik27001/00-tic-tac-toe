@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+
+const PLAYERS = {
+  X: "X",
+  O: "O",
+};
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [board, setBoard] = useState(Array(9).fill(null));
+  const [turn, setTurn] = useState(PLAYERS.X);
+
+  function Square({ children, index }) {
+    const handleClick = () => {
+      const newBoard = [...board];
+      newBoard[index] = turn;
+      setBoard(newBoard);
+      setTurn(turn === PLAYERS.X ? PLAYERS.O : PLAYERS.X);
+    };
+
+    return (
+      <div onClick={handleClick} className="square">
+        {children}
+      </div>
+    );
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div>
+      <h1>Tic tac toe</h1>
+      <div className="game">
+        {board.map((_, index) => {
+          return (
+            <Square key={index} index={index}>
+              {board[index]}
+            </Square>
+          );
+        })}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
